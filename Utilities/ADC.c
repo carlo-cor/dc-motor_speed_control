@@ -1,6 +1,4 @@
-#include "TM4C123GH6PM.h"
-#include "tm4c123gh6pm_def.h"
-#include <stdio.h>
+#include "ADC.h"
 
 // NOTE: Rewire and check mapping
 // ------------------------------
