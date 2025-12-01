@@ -1,0 +1,12 @@
+.\objects\motor.o: Utilities\motor.c
+.\objects\motor.o: Utilities\motor.h
+.\objects\motor.o: C:\Keil_v5\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123\TM4C123GH6PM.h
+.\objects\motor.o: C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.8.0\CMSIS\Core\Include\core_cm4.h
+.\objects\motor.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\motor.o: C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.8.0\CMSIS\Core\Include\cmsis_version.h
+.\objects\motor.o: C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.8.0\CMSIS\Core\Include\cmsis_compiler.h
+.\objects\motor.o: C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.8.0\CMSIS\Core\Include\cmsis_armcc.h
+.\objects\motor.o: C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.8.0\CMSIS\Core\Include\mpu_armv7.h
+.\objects\motor.o: C:\Keil_v5\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123\system_TM4C123.h
+.\objects\motor.o: Utilities\tm4c123gh6pm_def.h
+.\objects\motor.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h

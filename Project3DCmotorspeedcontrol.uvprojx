@@ -423,7 +423,7 @@
                   <MiscControls></MiscControls>
                   <Define></Define>
                   <Undefine></Undefine>
-                  <IncludePath>..\extract</IncludePath>
+                  <IncludePath>.\Utilities</IncludePath>
                 </VariousControls>
               </Cads>
               <Aads>
@@ -448,39 +448,44 @@
           </GroupOption>
           <Files>
             <File>
-              <FileName>os_v2.c</FileName>
+              <FileName>main.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\extract\os_v2.c</FilePath>
+              <FilePath>.\main.c</FilePath>
             </File>
             <File>
-              <FileName>Voltage2RPM.c</FileName>
+              <FileName>ADC.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\extract\Voltage2RPM.c</FilePath>
-            </File>
-            <File>
-              <FileName>ASCII_Conversions.s</FileName>
-              <FileType>2</FileType>
-              <FilePath>..\extract\ASCII_Conversions.s</FilePath>
+              <FilePath>.\Utilities\ADC.c</FilePath>
             </File>
             <File>
               <FileName>Keypad.s</FileName>
               <FileType>2</FileType>
-              <FilePath>..\extract\Keypad.s</FilePath>
+              <FilePath>.\Utilities\Keypad.s</FilePath>
             </File>
             <File>
               <FileName>LCD.s</FileName>
               <FileType>2</FileType>
-              <FilePath>..\extract\LCD.s</FilePath>
+              <FilePath>.\Utilities\LCD.s</FilePath>
+            </File>
+            <File>
+              <FileName>motor.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Utilities\motor.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_v2.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Utilities\os_v2.c</FilePath>
             </File>
             <File>
               <FileName>osasm_V2.s</FileName>
               <FileType>2</FileType>
-              <FilePath>..\extract\osasm_V2.s</FilePath>
+              <FilePath>.\Utilities\osasm_V2.s</FilePath>
             </File>
             <File>
-              <FileName>main.c</FileName>
+              <FileName>Voltage2RPM.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\main.c</FilePath>
+              <FilePath>.\Utilities\Voltage2RPM.c</FilePath>
             </File>
           </Files>
         </Group>

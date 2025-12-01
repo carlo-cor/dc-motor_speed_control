@@ -40,3 +40,4 @@ uint8_t ADC_Read(void){
     uint8_t ADC_DATA = ((GPIOB->DATA & 0x7C) << 1) | (GPIOE->DATA & 0x06) | ((GPIOB->DATA & 0x80) >> 7);
     return ADC_DATA;
 }
+

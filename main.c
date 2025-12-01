@@ -7,7 +7,7 @@
 
 #define TIMESLICE 32000		 // Timeslice of 2 ms
 #define PWM_PERIOD 2500		 // PWM period
-#define PWM_DUTY_CYCLE 1500	 // PWM duty cycle
+#define PWM_DUTY_CYCLE 500	 // PWM duty cycle
 #define TIMER_RELOAD_VALUE 0 // Timer reload value
 
 #define DEFAULT_MOTOR_SPEED 400 // Default motor speed
@@ -28,9 +28,7 @@ void OS_Sleep(uint32_t SleepCtr);
 void OS_Suspend(void);
 void OS_Wait(int32_t *s);
 
-// PWM Config
 void TIMER0A_Handler(uint32_t reload);
-void PWM_Config(uint16_t period, uint16_t high);
 
 uint8_t Key_ASCII;
 
@@ -63,7 +61,7 @@ void retrieveInput(void)
 	{
 		Scan_Keypad();								  // Blocks until a key is pressed
 		uint8_t k = Key_ASCII;						  // Takes in value from keypad press
-		unsigned char key_value = (unsigned char)(k); // Cast value into readable character
+		// unsigned char key_value = (unsigned char)(k); // Cast value into readable character
 
 		if (k >= '0' && k <= '9')
 		{
@@ -84,7 +82,7 @@ void retrieveInput(void)
 
 void updateLCD(void)
 {
-	/*
+	
 	char tbuf[6], cbuf[6], tpad[6], cpad[6];
 
 	// Row 1 Line
@@ -98,15 +96,17 @@ void updateLCD(void)
 	Display_Msg("INS ");
 	Display_Msg("C: ");
 	Display_Msg("INS");
-	*/
+	
 }
 
 void motorPIDControlLoop(void)
 {
+	/*
 	uint32_t kP;
 	uint32_t kI;
 	uint32_t kD;
-
+	*/
+	
 	/*
 	// NOTE: Tadrous' PID implementation variables from slides, clean up and look into more
 	int *startPt;
@@ -125,6 +125,27 @@ void motorPIDControlLoop(void)
 	*/
 
 
+}
+
+// NOTE: Clean up
+void TIMER0A_Handler(uint32_t reload)
+{
+	/*
+	X = inputSpeed(k); // estimated speed
+	err = X_err - X;   // error
+	if (err < -10)
+		actual_speed--; // decrease if too fast
+	else if (err > 10)
+		actual_speed++; // increase if too slow
+	// leave as is if close enough
+	if (actual_speed < 2)
+		actual_speed = 2; // underflow (minimum PWM)
+	if (actual_speed > 249)
+		actual_speed = 249;	  // overflow (maximum PWM)
+	PWM1C_Duty(actual_speed); // output to actuator
+	TIMER0_ICR_R = 0x01;
+	// acknowledge timer0A periodic timer
+	*/
 }
 
 int main(void)

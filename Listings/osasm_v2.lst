@@ -135,7 +135,7 @@ ARM Macro Assembler    Page 3
 
 
 ne="__UVISION_VERSION SETA 523" --predefine="_RTE_ SETA 1" --predefine="TM4C123
-GH6PM SETA 1" --list=.\listings\osasm_v2.lst ..\extract\osasm_V2.s
+GH6PM SETA 1" --list=.\listings\osasm_v2.lst Utilities\osasm_V2.s
 
 
 
@@ -146,7 +146,7 @@ Relocatable symbols
 
 Symbol: .text
    Definitions
-      At line 27 in file ..\extract\osasm_V2.s
+      At line 27 in file Utilities\osasm_V2.s
    Uses
       None
 Comment: .text unused
@@ -154,33 +154,33 @@ OS_DisableInterrupts 00000000
 
 Symbol: OS_DisableInterrupts
    Definitions
-      At line 40 in file ..\extract\osasm_V2.s
+      At line 40 in file Utilities\osasm_V2.s
    Uses
-      At line 33 in file ..\extract\osasm_V2.s
+      At line 33 in file Utilities\osasm_V2.s
 Comment: OS_DisableInterrupts used once
 OS_EnableInterrupts 00000004
 
 Symbol: OS_EnableInterrupts
    Definitions
-      At line 45 in file ..\extract\osasm_V2.s
+      At line 45 in file Utilities\osasm_V2.s
    Uses
-      At line 34 in file ..\extract\osasm_V2.s
+      At line 34 in file Utilities\osasm_V2.s
 Comment: OS_EnableInterrupts used once
 StartOS 0000002E
 
 Symbol: StartOS
    Definitions
-      At line 65 in file ..\extract\osasm_V2.s
+      At line 65 in file Utilities\osasm_V2.s
    Uses
-      At line 35 in file ..\extract\osasm_V2.s
+      At line 35 in file Utilities\osasm_V2.s
 Comment: StartOS used once
 SysTick_Handler 00000008
 
 Symbol: SysTick_Handler
    Definitions
-      At line 50 in file ..\extract\osasm_V2.s
+      At line 50 in file Utilities\osasm_V2.s
    Uses
-      At line 36 in file ..\extract\osasm_V2.s
+      At line 36 in file Utilities\osasm_V2.s
 Comment: SysTick_Handler used once
 5 symbols
 
@@ -193,18 +193,18 @@ RunPt 00000000
 
 Symbol: RunPt
    Definitions
-      At line 32 in file ..\extract\osasm_V2.s
+      At line 32 in file Utilities\osasm_V2.s
    Uses
-      At line 53 in file ..\extract\osasm_V2.s
-      At line 66 in file ..\extract\osasm_V2.s
+      At line 53 in file Utilities\osasm_V2.s
+      At line 66 in file Utilities\osasm_V2.s
 
 Scheduler 00000000
 
 Symbol: Scheduler
    Definitions
-      At line 26 in file ..\extract\osasm_V2.s
+      At line 26 in file Utilities\osasm_V2.s
    Uses
-      At line 57 in file ..\extract\osasm_V2.s
+      At line 57 in file Utilities\osasm_V2.s
 Comment: Scheduler used once
 2 symbols
 344 symbols in table

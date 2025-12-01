@@ -1,4 +1,4 @@
-.\objects\voltage2rpm.o: ..\extract\Voltage2RPM.c
+.\objects\voltage2rpm.o: Utilities\Voltage2RPM.c
 .\objects\voltage2rpm.o: C:\Keil_v5\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123\tm4c123gh6pm.h
 .\objects\voltage2rpm.o: C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.8.0\CMSIS\Core\Include\core_cm4.h
 .\objects\voltage2rpm.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
@@ -7,4 +7,4 @@
 .\objects\voltage2rpm.o: C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.8.0\CMSIS\Core\Include\cmsis_armcc.h
 .\objects\voltage2rpm.o: C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.8.0\CMSIS\Core\Include\mpu_armv7.h
 .\objects\voltage2rpm.o: C:\Keil_v5\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123\system_TM4C123.h
-.\objects\voltage2rpm.o: ..\extract\tm4c123gh6pm_def.h
+.\objects\voltage2rpm.o: Utilities\tm4c123gh6pm_def.h

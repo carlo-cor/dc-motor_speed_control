@@ -1,1 +1,1 @@
-.\objects\lcd.o: ..\extract\LCD.s
+.\objects\lcd.o: Utilities\LCD.s

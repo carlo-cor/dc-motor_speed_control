@@ -11,6 +11,6 @@ void DCMotor_Init(void);
 void setMotorDirectionFwd(void);
 void setMotorDirectionBckwrd(void);
 void setMotorSpeed(uint16_t duty);
-void Timer0A_Handler(void);
 
 #endif
+
