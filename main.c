@@ -3,14 +3,13 @@
 #include "ADC.h"
 #include "motor.h"
 
-// NOTE: Fix #includes, and make header files for .c
-
 #define TIMESLICE 32000		 // Timeslice of 2 ms
-#define PWM_PERIOD 2500		 // PWM period
-#define PWM_DUTY_CYCLE 500	 // PWM duty cycle
+#define CPU_HZ 16000			 // CPU Clock Hz
+#define PWM_PERIOD 4000		 // PWM period
+#define PWM_DUTY_CYCLE 2000	 // PWM duty cycle
 #define TIMER_RELOAD_VALUE 0 // Timer reload value
 
-#define DEFAULT_MOTOR_SPEED 400 // Default motor speed
+#define DEFAULT_MOTOR_SPEED 2000 // Default motor speed
 
 // Threads
 void retrieveInput(void);
@@ -31,6 +30,8 @@ void OS_Wait(int32_t *s);
 void TIMER0A_Handler(uint32_t reload);
 
 uint8_t Key_ASCII;
+int32_t sampledADC_value;
+int32_t targetRPM;
 
 /*
 // NOTE: Not sure what these are for again? Double check later.
@@ -54,8 +55,37 @@ extern void Set_Blink_ON(uint32_t pos);
 extern void Set_Blink_OFF(void);
 extern void Delay1ms(uint32_t n);
 
+extern int32_t Current_speed(int32_t Avg_volt);
+
+static inline void Delay100us(void)
+{
+    const uint32_t cycles = (CPU_HZ / 10000u); // 100us worth of cycles
+    uint32_t start = DWT->CYCCNT;
+    while ((uint32_t)(DWT->CYCCNT - start) < cycles) { }
+}
+
 void retrieveInput(void)
 {
+	// ADC Implementation
+	uint8_t sum = 0;
+	uint8_t avgVal = 0;
+	
+	// Attain a sample per 100us and sum it together
+	for(uint32_t i = 0; i < 100; i++){
+		sum += i;
+		Delay100us();
+	}
+	
+	sampledADC_value = sum/100; 									// Averaged sampled ADC value
+	targetRPM = Current_speed(sampledADC_value);  // Get target RPM speed using voltage conversion function
+	
+	// If sampled ADC value is below zero for whatever reason, no RPM
+	if(targetRPM < 0){
+		targetRPM = 0;
+	}
+	
+	// continue..
+	
 	// Keypad Input
 	while (1)
 	{
@@ -155,13 +185,12 @@ int main(void)
 	Init_LCD_Ports();
 	Init_LCD();
 	PWM_Config(PWM_PERIOD, PWM_DUTY_CYCLE);
-	DCMotor_Init();
 	ADC_Init();
 
-	// Default Motor Speed
-	setMotorDirectionFwd();
-	setMotorSpeed(DEFAULT_MOTOR_SPEED);
-
+	// Default Motor Speed Test
+	// setMotorDirectionFwd();
+	// setMotorSpeed(DEFAULT_MOTOR_SPEED);
+	
 	// RTOS Thread Control
 	/*
 	OS_AddThreads(&retrieveInput, &updateLCD, &motorPIDControlLoop);
