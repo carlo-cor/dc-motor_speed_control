@@ -1,1 +1,1 @@
-.\objects\keypad.o: ..\extract\Keypad.s
+.\objects\keypad.o: Utilities\Keypad.s

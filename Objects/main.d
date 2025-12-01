@@ -8,4 +8,7 @@
 .\objects\main.o: C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.8.0\CMSIS\Core\Include\mpu_armv7.h
 .\objects\main.o: C:\Keil_v5\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123\system_TM4C123.h
 .\objects\main.o: tm4c123gh6pm_def.h
+.\objects\main.o: .\Utilities\ADC.h
+.\objects\main.o: .\Utilities\tm4c123gh6pm_def.h
 .\objects\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+.\objects\main.o: .\Utilities\motor.h

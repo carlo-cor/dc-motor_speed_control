@@ -1,6 +1,4 @@
-#include "TM4C123GH6PM.h"
-#include "tm4c123gh6pm_def.h"
-#include <stdio.h>
+#include "motor.h"
 
 void PWM_Config(uint16_t period, uint16_t high)
 {
@@ -27,7 +25,7 @@ void PWM_Config(uint16_t period, uint16_t high)
 
 // DC Motor Drivers
 void DCMotor_Init(void){
-	SYSCTL->RCGCGPIO |= 0x02;				  // Activate Port B
+	SYSCTL->RCGCGPIO |= 0x02;				  				// Activate Port B
 	while ((SYSCTL->RCGCGPIO & 0x02) == 0){}; // Allow time for clock Port B to setup
 	GPIOB->DIR |= 0x03; // Make PB0-1 input
 	GPIOB->DEN |= 0x03; // Enable digital I/O on PB0-1
@@ -46,21 +44,3 @@ void setMotorSpeed(uint16_t duty){
 	PWM1->_3_CMPA = duty - 1;					// Set speed via duty cycle value (percentage)
 }
 
-// NOTE: Clean up
-void Timer0A_Handler(void)
-{
-	X = inputSpeed(k); // estimated speed
-	err = X_err - X;   // error
-	if (err < -10)
-		actual_speed--; // decrease if too fast
-	else if (err > 10)
-		actual_speed++; // increase if too slow
-	// leave as is if close enough
-	if (actual_speed < 2)
-		actual_speed = 2; // underflow (minimum PWM)
-	if (actual_speed > 249)
-		actual_speed = 249;	  // overflow (maximum PWM)
-	PWM1C_Duty(actual_speed); // output to actuator
-	TIMER0_ICR_R = 0x01;
-	// acknowledge timer0A periodic timer
-}

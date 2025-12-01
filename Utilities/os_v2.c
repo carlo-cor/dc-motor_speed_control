@@ -12,7 +12,6 @@
 #include "tm4c123gh6pm_def.h"
 
 
-
 // function definitions in osasm.s
 void OS_DisableInterrupts(void); // Disable interrupts
 void DisableInterrupts(void);

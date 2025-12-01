@@ -1,1 +1,1 @@
-.\objects\osasm_v2.o: ..\extract\osasm_V2.s
+.\objects\osasm_v2.o: Utilities\osasm_V2.s

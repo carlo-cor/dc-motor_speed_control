@@ -1,6 +1,4 @@
-#include "TM4C123GH6PM.h"
-#include "tm4c123gh6pm_def.h"
-#include <stdio.h>
+#include "ADC.h"
 
 // NOTE: Rewire and check mapping
 // ------------------------------
@@ -42,3 +40,4 @@ uint8_t ADC_Read(void){
     uint8_t ADC_DATA = ((GPIOB->DATA & 0x7C) << 1) | (GPIOE->DATA & 0x06) | ((GPIOB->DATA & 0x80) >> 7);
     return ADC_DATA;
 }
+
