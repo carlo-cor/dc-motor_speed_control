@@ -26,21 +26,34 @@ Project File Date:  12/01/2025
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 4 (build 422)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
-Build target 'Target 1'
-compiling motor.c...
+Rebuild target 'Target 1'
+assembling startup_TM4C123.s...
+RTE\Device\TM4C123GH6PM\startup_TM4C123.s(403): warning: A1274W: '\' at end of comment
+assembling LCD.s...
+Utilities\LCD.s(285): warning: A1581W: Added 2 bytes of padding at address 0x222
+assembling ASCII_Conversions.s...
+assembling Keypad.s...
+assembling osasm_V2.s...
+compiling system_TM4C123.c...
 compiling main.c...
-main.c(86): warning:  #177-D: variable "tbuf"  was declared but never referenced
-  	char tbuf[6], cbuf[6], tpad[6], cpad[6];
-main.c(86): warning:  #177-D: variable "cbuf"  was declared but never referenced
-  	char tbuf[6], cbuf[6], tpad[6], cpad[6];
-main.c(86): warning:  #177-D: variable "tpad"  was declared but never referenced
-  	char tbuf[6], cbuf[6], tpad[6], cpad[6];
-main.c(86): warning:  #177-D: variable "cpad"  was declared but never referenced
-  	char tbuf[6], cbuf[6], tpad[6], cpad[6];
-main.c: 4 warnings, 0 errors
+main.c(82): warning:  #177-D: variable "avgVal"  was declared but never referenced
+        uint8_t avgVal = 0;
+main.c(145): warning:  #177-D: variable "tpad"  was declared but never referenced
+        char inbuf[4], tbuf[4], cbuf[4], tpad[6], cpad[6];
+main.c(145): warning:  #177-D: variable "cpad"  was declared but never referenced
+        char inbuf[4], tbuf[4], cbuf[4], tpad[6], cpad[6];
+main.c(218): warning:  #111-D: statement is unreachable
+        return 0;
+main.c(219): warning:  #1-D: last line of file ends without a newline
+  }
+main.c: 5 warnings, 0 errors
+compiling os_v2.c...
+compiling Voltage2RPM.c...
+compiling ADC.c...
+compiling motor.c...
 linking...
-Program Size: Code=2060 RO-data=652 RW-data=32 ZI-data=608  
-".\Objects\Project3DCmotorspeedcontrol.axf" - 0 Error(s), 4 Warning(s).
+Program Size: Code=3296 RO-data=652 RW-data=100 ZI-data=612  
+".\Objects\Project3DCmotorspeedcontrol.axf" - 0 Error(s), 7 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -66,10 +79,10 @@ Package Vendor: Keil
    * Component: ARM::CMSIS:CORE:5.5.0
 
    * Component: Keil::Device:Startup:1.0.1
-      Include file:  Device\Include\TM4C123\TM4C123.h
-      Source file:   Device\Source\system_TM4C123.c
       Source file:   Device\Source\ARM\startup_TM4C123.s
-Build Time Elapsed:  00:00:01
+      Source file:   Device\Source\system_TM4C123.c
+      Include file:  Device\Include\TM4C123\TM4C123.h
+Build Time Elapsed:  00:00:00
 </pre>
 </body>
 </html>

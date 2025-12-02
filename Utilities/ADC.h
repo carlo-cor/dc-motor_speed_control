@@ -9,4 +9,7 @@
 void ADC_Init(void);
 uint8_t ADC_Read(void);
 
+static inline void ADC_StartConversion(void);
+static inline void ADC_WaitBusy(void);
+
 #endif

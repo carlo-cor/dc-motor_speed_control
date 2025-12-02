@@ -1,6 +1,5 @@
 .\objects\adc.o: Utilities\ADC.c
-.\objects\adc.o: Utilities\ADC.h
-.\objects\adc.o: C:\Keil_v5\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123\TM4C123GH6PM.h
+.\objects\adc.o: C:\Keil_v5\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123\tm4c123gh6pm.h
 .\objects\adc.o: C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.8.0\CMSIS\Core\Include\core_cm4.h
 .\objects\adc.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 .\objects\adc.o: C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.8.0\CMSIS\Core\Include\cmsis_version.h
@@ -8,5 +7,6 @@
 .\objects\adc.o: C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.8.0\CMSIS\Core\Include\cmsis_armcc.h
 .\objects\adc.o: C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.8.0\CMSIS\Core\Include\mpu_armv7.h
 .\objects\adc.o: C:\Keil_v5\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123\system_TM4C123.h
+.\objects\adc.o: Utilities\ADC.h
 .\objects\adc.o: Utilities\tm4c123gh6pm_def.h
 .\objects\adc.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
