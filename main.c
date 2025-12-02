@@ -5,7 +5,7 @@
 
 #define TIMESLICE 32000        // Timeslice of 2 ms
 #define CPU_HZ 16000                 // CPU Clock Hz
-#define PWM_PERIOD 4000        // PWM period
+#define PWM_PERIOD 5000        // PWM period
 #define PWM_DUTY_CYCLE 2000    // PWM duty cycle
 #define TIMER_RELOAD_VALUE 0 // Timer reload value
 
@@ -18,7 +18,7 @@ void motorPIDControlLoop(void);
 
 // OS Functions
 void OS_Init(void);
-int OS_AddThreads(void (*task0)(void), void (*task1)(void), void (*task2)(void));
+int OS_AddThreads(void (*task0)(void), void (*task1)(void));
 void OS_Launch(uint32_t theTimeSlice);
 
 // OS Semaphore Functions
@@ -43,8 +43,9 @@ int32_t kI = 1;
 int32_t kD = 1; 
 
 int32_t actuatorRPM; 			 // Speed error adjustment
-uint32_t time;             // Time in 0.1 ms
-uint32_t count;            // Counter for time
+int32_t sum;					// Sum variable
+int time;             // Time in 0.1 ms
+int count;            // Counter for time
 
 // Keypad Initialization and Utility Functions
 extern void(Init_Keypad(void));
@@ -70,10 +71,12 @@ static inline void Delay100us(void)
     while ((uint32_t)(DWT->CYCCNT - start) < cycles) { }
 }
 
-// Globals
-int32_t Keypress_Buffer = -1;      // -1 means empty
-uint8_t sampledADC_value = 0;
+// ADC Variables
+uint32_t sampledADC_value = 0;
 int32_t targetRPM = 0;
+
+// Keypad Variables
+int32_t Keypress_Buffer = -1;      // -1 means empty
 char keypadBuffer[17];             // fits one LCD line (16 chars + null)
 int keypadIndex = 0;
 
@@ -85,50 +88,78 @@ uint8_t getKeypadChar(void)
     return (uint8_t)(*(volatile uint32_t *)&Key_ASCII);
 }
 
-uint8_t getADCavg(void)
-{
-    uint32_t sum = 0;
-
-    for(int i = 0; i < 100; i++)
-    {
-        sum += ADC_Read();      // <--- correct ADC read
-        Delay100us();
-    }
-
-    return (uint8_t)(sum / 100);
-}
-
 // Thread Functions
 
-void retrieveInput(void)
-{
-    uint8_t k = getKeypadChar();   // Waits until a key is pressed
+void retrieveInput(){
+// Keypad Input 
+	while(1){
+            uint8_t k = getKeypadChar();                                  // Takes in value from keypad press
+            
+            if (k >= '0' && k <= '9')
+            {
+                  // handle digits
+                  if(Keypress_Buffer <-1)// -1 means the buffer is empty
+                  {
+                        Keypress_Buffer = Key_ASCII-48;
+                        
+                  }
+                  else if(Keypress_Buffer <1000){
+                  Keypress_Buffer = Keypress_Buffer* 10 + Key_ASCII-48;
+                        
+                  }
+                  else{
+                        targetRPM  = Keypress_Buffer;
+                        Keypress_Buffer = -1;
+                        
+                  }
+            }
+            else if (k == '#')
+            {
+                  if(Keypress_Buffer == -1){
+										targetRPM  = 0;
+										
+									}
+                  targetRPM  = Keypress_Buffer;
+									Keypress_Buffer = -1;
+                  // confirm input
+                  
+            }
+            else if (k == 'C')
+            {
+                  // clear input
+                  Keypress_Buffer = -1; // -1 means the buffer is empty
+            }
 
-    // Clear buffer if user presses 'C'
-    if(k == 'C')
-    {
-        keypadIndex = 0;
-        keypadBuffer[0] = '\0';
-        return;
-    }
+            OS_Sleep(20); // small debounce + yield
+					}  }
 
-    // Append character if space available
-    if(keypadIndex < 16)
-    {
-        keypadBuffer[keypadIndex++] = k;
-        keypadBuffer[keypadIndex]   = '\0'; // null terminate
-    }
-}
 
 void updateLCD(void)
 {
-    // Row 1
-    Set_Position(0x00);
-    Display_Msg("Keys: ");
+	while(1){
+			char inbuf[4], tbuf[4], cbuf[4], tpad[6], cpad[6];
 
-    Set_Position(0x06);      // print starting at column 6
-    Display_Msg(keypadBuffer);
-}
+      // Row 1 Line
+      Set_Position(0x00);
+      Display_Msg("Input: ");
+      if(Keypress_Buffer > -1)
+      {
+         Hex2ASCII(inbuf, Keypress_Buffer);
+         Display_Msg(inbuf);   
+      }
+      else{Display_Msg("       ");}
+
+      // Row 2 Line
+      Set_Position(0x40);
+      Display_Msg("T: ");
+      Hex2ASCII(tbuf, targetRPM);
+      Display_Msg(tbuf);
+            
+      Display_Msg("C: ");
+      Hex2ASCII(cbuf, estRPM);
+      Display_Msg(cbuf);
+		}}
+
 
 
 void motorPIDControlLoop(void)
@@ -137,10 +168,17 @@ void motorPIDControlLoop(void)
 }
 
 void TIMER0A_Handler(uint32_t reload)
-{
+{		
       time++;
-      if((count++) == 4000){
-            count = 0;
+			
+			// Attain a sample per 100us and sum it together
+			sum += ADC_Read();
+			count++;
+      if((count) == 100){			
+						sampledADC_value = sum * 10;     					 // Convert to mV and average
+						estRPM = Current_speed(sampledADC_value);  // Get estimate RPM speed using voltage conversion function
+            
+						count = 0;
             error = estRPM - targetRPM; // Calculated error of current speed versus desired
 
             // PID variable calculations
@@ -155,24 +193,36 @@ void TIMER0A_Handler(uint32_t reload)
             if(actuatorRPM < 100) actuatorRPM = 100;
             if(actuatorRPM > 19900) actuatorRPM = 19900;
             setMotorSpeed(actuatorRPM);
+						count = 0;
       }
       TIMER0->ICR = 0x01;
 }
 
 int main(void)
 {
-    Init_LCD_Ports();
-    Init_LCD();
-    Init_Keypad();
+	// Initialization Functions
+	OS_Init();
+	Init_LCD_Ports();
+	Init_LCD();
+	Init_Keypad();
+	PWM_Config(PWM_PERIOD, PWM_DUTY_CYCLE);
+	ADC_Init();
 
-		/*
-    keypadBuffer[0] = '\0'; // initialize empty buffer
-
-    while(1)
+	// Default Motor Speed Test (Working)
+	//setMotorDirectionFwd();
+	// setMotorSpeed(DEFAULT_MOTOR_SPEED);
+	
+	// RTOS Thread Control
+	/*
+	while(1)
     {
         retrieveInput();   // Read one key and store it
         updateLCD();       // Show buffer on LCD
         Delay1ms(50);
     }
-		*/
+	*/	
+	 OS_AddThreads(&retrieveInput, &updateLCD);
+	OS_Launch(TIMESLICE);
+
+	//return 0;
 }

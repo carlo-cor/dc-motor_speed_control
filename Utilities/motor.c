@@ -29,6 +29,7 @@ void PWM_Config(uint16_t period, uint16_t high)
 	GPIOB->DEN |= 0x03;  								    // Set pins 0-1 as output 
   GPIOB->DATA &= ~0x03;										// Clear data line
   GPIOB->DATA |= 0x02;  									// Write to data line to move forward
+	
 }
 
 void setMotorDirectionFwd(void){
