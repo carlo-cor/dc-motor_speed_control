@@ -2,15 +2,15 @@
 #include "ADC.h"
 
 // ADS7806 Parallel MSB mode
-// Data bus mapping (your wiring):
+// Data bus mapping:
 //   PB2 = D7 (MSB)
 //   PB3 = D6
 //   PB4 = D5
 //   PB5 = D4
-//   PB6 = D3
+//   PB6 = D3 need to change to different pin
 //   PE2 = D2
-//   PE1 = D1
-//   PB7 = D0 (LSB of MSB byte)
+//   PE1 = D1	
+//   PB7 = D0 (LSB of MSB byte) need to change to different pin
 //
 // Control pins:
 //   PD1 = R/C (output)  ? ADS7806 R/C
@@ -40,8 +40,8 @@ void ADC_Init(void)
     //-------------------------------------------------------
     // Enable Ports B, E, D clocks
     //-------------------------------------------------------
-    SYSCTL->RCGCGPIO |= (1U<<1) | (1U<<4) | (1U<<3); // B, E, D
-    while ((SYSCTL->PRGPIO & ((1U<<1)|(1U<<4)|(1U<<3))) == 0U) {}
+    SYSCTL->RCGCGPIO |= 0x1A; // B, E, D
+    while ((SYSCTL->PRGPIO & 0x1A) == 0){};	
 
     //-------------------------------------------------------
     // DATA PINS (PB2–PB7) = inputs

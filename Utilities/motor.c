@@ -6,10 +6,10 @@ void PWM_Config(uint16_t period, uint16_t high)
 	
 	SYSCTL->RCGCPWM |= 0x02;  // Set clock to use PWM1
 	SYSCTL->RCGCGPIO |= 0x22; // Activate Port B and F
-	while ((SYSCTL->PRGPIO & 0x22) == 0){};					  // Allow time for clock Port B and F to setup
+	while ((SYSCTL->PRGPIO & 0x22) == 0){};		// Allow time for clock Port B and F to setup
 		
 	// PWM Generator Initialization
-	SYSCTL->RCC &= ~0x00100000;  // NOTE: (FLAGGED! Check w/ Alex's for reference) Use system clock for PWM
+	SYSCTL->RCC &= ~0x00100000;               // Use system clock for PWM
 	PWM1->_3_CTL = 0x00;								      // Disable PWM1_3 during configuration
 	PWM1->_3_GENA = 0xC8;								      // Output low for load, high for match
 	PWM1->_3_LOAD = period - 1;								// Period is 2500

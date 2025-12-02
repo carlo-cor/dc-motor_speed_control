@@ -487,6 +487,11 @@
               <FileType>1</FileType>
               <FilePath>.\Utilities\Voltage2RPM.c</FilePath>
             </File>
+            <File>
+              <FileName>ASCII_Conversions.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>.\Utilities\ASCII_Conversions.s</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
