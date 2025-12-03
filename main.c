@@ -10,6 +10,7 @@
 #define TIMER_RELOAD_VALUE 0 // Timer reload value
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 #define DEFAULT_MOTOR_SPEED 2000 // Default motor speed
 
 // Threads
@@ -24,6 +25,13 @@ void motorPIDControlLoop(void);
 #define KI                 0.1f       // Integral gain (start very small)
 #define KD                 0.01f      // Derivative gain (optional)
 
+=======
+// PID Controller Gains (tuning parameters - MUST TUNE THESE!)
+#define KP                 1.0f       // Proportional gain (start small)
+#define KI                 0.1f       // Integral gain (start very small)
+#define KD                 0.01f      // Derivative gain (optional)
+
+>>>>>>> Stashed changes
 #define SAMPLE_TIME_MS     10         // PID update period in milliseconds
 #define DEFAULT_MOTOR_SPEED 2000      // Default motor speed for testing
 
@@ -62,6 +70,15 @@ volatile float actuatorRPM;           // Calculated motor speed adjustment
 volatile int32_t sum;                 // ADC sample accumulator
 volatile int time;                    // Time counter in 0.1 ms units
 volatile int count;                   // Sample counter for averaging
+<<<<<<< Updated upstream
+=======
+
+// PID state variables
+volatile float integral = 0.0f;       // Integral accumulator
+volatile float prev_error = 0.0f;     // Previous error for derivative
+volatile float prev_estRPM = 0.0f;    // Previous RPM for derivative on measurement
+volatile uint32_t last_pid_time = 0;  // Last PID update time
+>>>>>>> Stashed changes
 
 // PID state variables
 volatile float integral = 0.0f;       // Integral accumulator
@@ -93,6 +110,9 @@ extern uint8_t Key_ASCII;
 =======
 // ADC Data
 volatile uint32_t sampledADC_value = 0; // Latest sampled ADC value
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
 // LCD Initialization and Utility Functions
@@ -119,6 +139,9 @@ static inline void Delay100us(void)
 static inline void Delay100us(void)
 {
     const uint32_t cycles = (CPU_HZ / 10000u); // Calculate cycles for 100µs
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     uint32_t start = DWT->CYCCNT;
     while ((uint32_t)(DWT->CYCCNT - start) < cycles) { }
