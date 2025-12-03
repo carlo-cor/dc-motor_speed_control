@@ -32,9 +32,6 @@ uint32_t Mail;		// mailbox support
 int32_t Send;    // mailbox semaphore
 uint32_t Lost_mailbox;     // mailbox lost data
 
-
-
-
 struct tcb{						// thread control block supports blocking, sleeping and priority
   int32_t *sp;       // pointer to stack (valid for threads not running
   struct tcb *next;  // linked-list pointer
@@ -49,6 +46,24 @@ tcbType tcbs[NUMTHREADS];
 tcbType *RunPt;
 int32_t Stacks[NUMTHREADS][STACKSIZE];
 
+void PI_Timer_Init(void)
+{
+    SYSCTL_RCGCTIMER_R |= 0x01;     // Enable Timer0 clock
+    while((SYSCTL_RCGCTIMER_R & 0x01) == 0);
+
+    TIMER0_CTL_R   &= ~0x01;        // Disable Timer0A
+    TIMER0_CFG_R    = 0x00;         // 32-bit mode
+    TIMER0_TAMR_R   = 0x02;         // Periodic timer, down-count
+    TIMER0_TAILR_R  = 160000 - 1;   // 10 ms @ 16 MHz
+    TIMER0_TAPR_R   = 0;            // No prescale
+
+    TIMER0_ICR_R    = 0x01;         // Clear timeout flag
+    TIMER0_IMR_R   |= 0x01;         // Enable timeout interrupt
+
+    NVIC_EN0_R     |= (1 << 19);    // IRQ 19 = Timer0A
+
+    TIMER0_CTL_R   |= 0x01;         // Enable Timer0A
+}
 
 // ******** OS_Suspend ************
 // suspends the current threads and triggers SysTick 

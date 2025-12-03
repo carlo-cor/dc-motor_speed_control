@@ -112,7 +112,6 @@ void ADC_Init(void)
 // Read 8-bit MSB result using fixed delay instead of BUSY
 int8_t ADC_Read(void)
 {
-		int8_t test = 0;
     int8_t value = 0;
 
     ADC_StartConversion();
@@ -138,6 +137,5 @@ int8_t ADC_Read(void)
     // PE2–PE1 ? D1–D0
     value |= (pe & (1<<2)) ? (1<<1) : 0;   // PE2 -> bit1
     value |= (pe & (1<<1)) ? (1<<0) : 0;   // PE1 -> bit0
-		test = value;
     return value * 10 / 0x7F;
 }

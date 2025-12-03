@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <stdint.h>
 
-void PWM_Config(uint16_t period, uint16_t high);
+void PWM_Config(uint32_t period, uint16_t high);
 void setMotorDirectionFwd(void);
 void setMotorDirectionBckwrd(void);
 void setMotorSpeed(uint16_t duty);
