@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Objects\Project3DCmotorspeedcontrol.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Objects\Project3DCmotorspeedcontrol.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060422: Last Updated: Tue Dec 02 21:33:19 2025
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060422: Last Updated: Wed Dec 03 22:03:20 2025
 <BR><P>
 <H3>Maximum Stack Usage =         48 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -1375,7 +1375,7 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[8f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[a1]"></a>ADC_Read</STRONG> (Thumb, 198 bytes, Stack size 24 bytes, adc.o(i.ADC_Read))
+<P><STRONG><a name="[a1]"></a>ADC_Read</STRONG> (Thumb, 200 bytes, Stack size 24 bytes, adc.o(i.ADC_Read))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = ADC_Read &rArr; DelayUs &rArr; DelayCycles
 </UL>
 <BR>[Calls]<UL><LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DelayUs
@@ -1452,7 +1452,7 @@ Global Symbols
 <P><STRONG><a name="[78]"></a>SystemInit</STRONG> (Thumb, 14 bytes, Stack size 0 bytes, system_tm4c123.o(i.SystemInit))
 <BR>[Address Reference Count : 1]<UL><LI> startup_tm4c123.o(.text)
 </UL>
-<P><STRONG><a name="[1f]"></a>TIMER0A_Handler</STRONG> (Thumb, 208 bytes, Stack size 8 bytes, main.o(i.TIMER0A_Handler))
+<P><STRONG><a name="[1f]"></a>TIMER0A_Handler</STRONG> (Thumb, 262 bytes, Stack size 8 bytes, main.o(i.TIMER0A_Handler))
 <BR><BR>[Stack]<UL><LI>Max Depth = 48<LI>Call Chain = TIMER0A_Handler &rArr; ADC_Read &rArr; DelayUs &rArr; DelayCycles
 </UL>
 <BR>[Calls]<UL><LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;setMotorSpeed
@@ -1487,7 +1487,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__rt_entry_main
 </UL>
 
-<P><STRONG><a name="[7b]"></a>retrieveInput</STRONG> (Thumb, 140 bytes, Stack size 0 bytes, main.o(i.retrieveInput))
+<P><STRONG><a name="[7b]"></a>retrieveInput</STRONG> (Thumb, 148 bytes, Stack size 0 bytes, main.o(i.retrieveInput))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8 + Unknown Stack Size
 <LI>Call Chain = retrieveInput &rArr; getKeypadChar
 </UL>

@@ -3,7 +3,7 @@
 
 // ADS7806 Parallel MSB mode
 // Data bus mapping:
-//   PB5 = D7 (MSB) ADC-B11Pin9
+//   PB5 = D7 (MSB) ADC-B11 Pin9
 //   PB4 = D6	ADC-B10 Pin10
 //   PB3 = D5	ADC-B9 Pin11
 //   PB2 = D4 ADC-B8 Pin12
@@ -14,7 +14,7 @@
 //
 // Control pins:
 //   PE3 = R/C (output)  
-//   PE4 = BUSY (output)
+//   PE4 = BUSY (input)
 //   PE5 = BYTE (output) 
 //
 
@@ -79,7 +79,7 @@ void ADC_Init(void)
     GPIOE->PCTL  &= ~(0x00000FF0); // Clear PE1/PE2 fields
 
     //=================================================================
-    // CONTROL PINS (UNCHANGED — DO NOT TOUCH!!)
+    // CONTROL PINS
     //=================================================================
 
     //-------------------------------------------------------
@@ -137,5 +137,7 @@ int8_t ADC_Read(void)
     // PE2–PE1 ? D1–D0
     value |= (pe & (1<<2)) ? (1<<1) : 0;   // PE2 -> bit1
     value |= (pe & (1<<1)) ? (1<<0) : 0;   // PE1 -> bit0
-    return value * 10 / 0x7F;
+		
+		value = (value * 10)/ 0x7F;
+    return value;
 }

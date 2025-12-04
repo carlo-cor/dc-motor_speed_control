@@ -11,16 +11,15 @@
 #include "motor.h"
 
 // System Configuration Constants
-#define TIMESLICE          32000      // RTOS time slice of 2 ms (16 MHz clock)
-#define CPU_HZ             16000      // CPU frequency in kHz (16 MHz)
-#define PWM_PERIOD         4000       // PWM period in ticks
-#define PWM_DUTY_CYCLE     0       // Initial PWM duty cycle
+#define TIMESLICE          32000    // RTOS time slice of 2 ms (16 MHz clock)
+#define CPU_HZ             16000    // CPU frequency in kHz (16 MHz)
+#define PWM_PERIOD         4000     // PWM period in ticks
+#define PWM_DUTY_CYCLE     1000     // Initial PWM duty cycle
+#define DEFAULT_MOTOR_SPEED 0       // Default motor speed for testing
 
 // PID Controller Gains (tuning parameters)
-#define kP                 16
-#define kI                 5
-
-#define DEFAULT_MOTOR_SPEED 2000      // Default motor speed for testing
+float kP = 1.0;
+float kI = 0.0;
 
 // Thread Function Declarations
 void retrieveInput(void);             // Handles keypad input
@@ -68,11 +67,10 @@ void TIMER0A_Handler(void);           // Timer interrupt handler for PID
 void PI_Timer_Init(void);             // Timer initialization
 
 // ADC Data
-uint32_t sampledADC_value = 0;        // Latest sampled ADC value
+int32_t sampledADC_value = 0;        // Latest sampled ADC value
 
 // Keypad Buffer Management
 int32_t Keypress_Buffer = -1;         // -1 indicates empty buffer
-char keypadBuffer[17];                // Buffer for LCD display (16 chars + null)
 int keypadIndex = 0;                  // Buffer index
 
 /**
@@ -124,7 +122,7 @@ void retrieveInput(void)
             else // Buffer full, set as target RPM
             {
                 targetRPM = Keypress_Buffer;
-                // Keypress_Buffer = -1; // Clear buffer
+                Keypress_Buffer = -1; // Clear buffer
             }
         }
         else if (k == '#') // Confirm entry
@@ -141,7 +139,7 @@ void retrieveInput(void)
             Keypress_Buffer = -1; // Reset buffer
         }
         
-        OS_Sleep(80); // Debounce delay and yield to scheduler
+        OS_Sleep(50); // Debounce delay and yield to scheduler
     }
 }
 
@@ -178,7 +176,7 @@ void updateLCD(void)
         Display_Msg(tbuf);
         
         Display_Msg(" C: ");
-        Hex2ASCII(cbuf, estRPM);
+        Hex2ASCII(cbuf, actuatorRPM);
         Display_Msg(cbuf);
 				for(int i = 0; i < 4; i++){
 					if (cbuf[i] >= '0' && cbuf[i]  <= '9')
@@ -209,25 +207,23 @@ void TIMER0A_Handler(void)
     if (count == 100) // Every 10ms (100 samples at 100µs intervals)
     {
 				count = 0;
-        sampledADC_value = sum * 10;			// Convert to mV and compute average
-        sampledADC_value = sampledADC_value;
+        sampledADC_value = sum /100;			        // Convert to mV and compute average
 			  estRPM = Current_speed(sampledADC_value); // Convert voltage to RPM
         
         error = targetRPM - estRPM; // Calculate speed error
         
-        // PID Calculations with scaling
-        P = (kP * error)/20 ;
-        I = I + (kI * error);
-
+				P = kP * error;
+				I = I + (kI * error);
+				
+				// Actuator RPM calculation
+				actuatorRPM = P + I;
+				
         // Integrator anti-windup limits
-        if (I < -500) I = -500;
-        if (I > 100) I = 100;
-        
-        // Compute actuator command (PI only in current implementation)
-        actuatorRPM = P + I;
-        
+				if (I > 200) I = 200;
+        if (I < -200) I = -200;
+				
         // Output saturation limits
-        //if (actuatorRPM < 400) actuatorRPM = 400;
+        if (actuatorRPM < 400) actuatorRPM = 400;
         if (actuatorRPM > 2400) actuatorRPM = 2400;
         
         setMotorSpeed(actuatorRPM); // Apply control output
@@ -256,7 +252,7 @@ int main(void)
     
     // Uncomment for motor testing without PID
     // setMotorDirectionFwd();
-    // setMotorSpeed(DEFAULT_MOTOR_SPEED);
+    // setMotorSpeed(500);
     
     // RTOS Setup and Launch
     OS_AddThreads(&retrieveInput, &updateLCD);
