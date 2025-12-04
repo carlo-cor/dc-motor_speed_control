@@ -13,13 +13,13 @@
 // System Configuration Constants
 #define TIMESLICE          32000    // RTOS time slice of 2 ms (16 MHz clock)
 #define CPU_HZ             16000    // CPU frequency in kHz (16 MHz)
-#define PWM_PERIOD         4000     // PWM period in ticks
-#define PWM_DUTY_CYCLE     1000     // Initial PWM duty cycle
+#define PWM_PERIOD         2500     // PWM period in ticks
+#define PWM_DUTY_CYCLE     1500     // Initial PWM duty cycle
 #define DEFAULT_MOTOR_SPEED 0       // Default motor speed for testing
 
 // PID Controller Gains (tuning parameters)
-float kP = 1.0;
-float kI = 0.0;
+float kP = 0.5;
+float kI = 0.02;
 
 // Thread Function Declarations
 void retrieveInput(void);             // Handles keypad input
@@ -41,8 +41,9 @@ uint8_t Key_ASCII;                    // Last pressed key in ASCII format
 int32_t Keypress_Buffer;              // Buffer for numeric keypad input
 
 // PID Controller Variables
-int32_t estRPM, targetRPM, error;     // Speed tracking and error
-int32_t P, I, D;                      // PID components
+int32_t estRPM, error;     						// Speed tracking and error
+int32_t targetRPM = PWM_DUTY_CYCLE;   // Initial target RPM speed
+double P, I, D;                      // PID components
 int32_t actuatorRPM;                  // Calculated motor speed adjustment
 int32_t sum;                          // ADC sample accumulator
 int time;                             // Time counter in 0.1 ms units
@@ -176,7 +177,7 @@ void updateLCD(void)
         Display_Msg(tbuf);
         
         Display_Msg(" C: ");
-        Hex2ASCII(cbuf, actuatorRPM);
+        Hex2ASCII(cbuf, estRPM);
         Display_Msg(cbuf);
 				for(int i = 0; i < 4; i++){
 					if (cbuf[i] >= '0' && cbuf[i]  <= '9')
@@ -206,9 +207,8 @@ void TIMER0A_Handler(void)
     
     if (count == 100) // Every 10ms (100 samples at 100µs intervals)
     {
-				count = 0;
-        sampledADC_value = sum /100;			        // Convert to mV and compute average
-			  estRPM = Current_speed(sampledADC_value); // Convert voltage to RPM
+				        // Convert to mV and compute average
+			  estRPM = Current_speed(10 * sum); // Convert voltage to RPM
         
         error = targetRPM - estRPM; // Calculate speed error
         
@@ -219,15 +219,16 @@ void TIMER0A_Handler(void)
 				actuatorRPM = P + I;
 				
         // Integrator anti-windup limits
-				if (I > 200) I = 200;
-        if (I < -200) I = -200;
+				if(I < -500) I=-500; // anti-reset windup
+			  if(I > 4000) I=4000;
 				
         // Output saturation limits
-        if (actuatorRPM < 400) actuatorRPM = 400;
+        if (actuatorRPM < 400 && (targetRPM != 0)) actuatorRPM = 400;
         if (actuatorRPM > 2400) actuatorRPM = 2400;
         
         setMotorSpeed(actuatorRPM); // Apply control output
         sum = 0; // Reset accumulator for next averaging period
+				count = 0;
     }
     
     TIMER0->ICR = 0x01; // Clear timer interrupt flag

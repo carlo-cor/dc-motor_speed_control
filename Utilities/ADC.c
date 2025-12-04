@@ -138,6 +138,6 @@ int8_t ADC_Read(void)
     value |= (pe & (1<<2)) ? (1<<1) : 0;   // PE2 -> bit1
     value |= (pe & (1<<1)) ? (1<<0) : 0;   // PE1 -> bit0
 		
-		value = (value * 10)/ 0x7F;
+		value = (value * 10000)/ 0x7F;
     return value;
 }

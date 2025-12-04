@@ -150,39 +150,56 @@
         <Ww>
           <count>0</count>
           <WinNumber>1</WinNumber>
-          <ItemText>sampledADC_value</ItemText>
+          <ItemText>duty</ItemText>
         </Ww>
         <Ww>
           <count>1</count>
           <WinNumber>1</WinNumber>
-          <ItemText>targetRPM</ItemText>
-        </Ww>
-        <Ww>
-          <count>2</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>ADC_value</ItemText>
-        </Ww>
-        <Ww>
-          <count>3</count>
-          <WinNumber>1</WinNumber>
           <ItemText>value</ItemText>
         </Ww>
+      </WatchWindow1>
+      <WatchWindow2>
         <Ww>
-          <count>4</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>test</ItemText>
-        </Ww>
-        <Ww>
-          <count>5</count>
-          <WinNumber>1</WinNumber>
+          <count>0</count>
+          <WinNumber>2</WinNumber>
           <ItemText>sum</ItemText>
         </Ww>
         <Ww>
-          <count>6</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>count</ItemText>
+          <count>1</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>estRPM</ItemText>
         </Ww>
-      </WatchWindow1>
+        <Ww>
+          <count>2</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>targetRPM</ItemText>
+        </Ww>
+        <Ww>
+          <count>3</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>actuatorRPM</ItemText>
+        </Ww>
+        <Ww>
+          <count>4</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>error</ItemText>
+        </Ww>
+        <Ww>
+          <count>5</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>P</ItemText>
+        </Ww>
+        <Ww>
+          <count>6</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>I</ItemText>
+        </Ww>
+        <Ww>
+          <count>7</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>sampledADC_value</ItemText>
+        </Ww>
+      </WatchWindow2>
       <MemoryWindow4>
         <Mm>
           <WinNumber>4</WinNumber>
