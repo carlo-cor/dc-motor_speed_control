@@ -120,9 +120,9 @@ int8_t ADC_Read(void)
     while ((GPIOE->DATA & 0x10) == 0) {}
 
     // Capture GPIO values
-    uint32_t pb = GPIOB->DATA;
-    uint32_t pc = GPIOC->DATA;
-    uint32_t pe = GPIOE->DATA;
+    int32_t pb = GPIOB->DATA;
+    int32_t pc = GPIOC->DATA;
+    int32_t pe = GPIOE->DATA;
 
     // PB5–PB2 ? D7–D4
     value |= (pb & (1<<5)) ? (1<<7) : 0;   // PB5 -> bit7
@@ -138,6 +138,6 @@ int8_t ADC_Read(void)
     value |= (pe & (1<<2)) ? (1<<1) : 0;   // PE2 -> bit1
     value |= (pe & (1<<1)) ? (1<<0) : 0;   // PE1 -> bit0
 		
-		value = (value * 10000)/ 0x7F;
+		value = (value  *10)/ 0x7F;
     return value;
 }

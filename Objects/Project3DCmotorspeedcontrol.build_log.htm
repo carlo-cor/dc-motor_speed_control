@@ -21,33 +21,35 @@ Target DLL:      lmidk-agdi.dll V???
 Dialog DLL:      TCM.DLL V1.27.0.0
  
 <h2>Project:</h2>
-C:\Users\ccortez\Downloads\dc-motor_speed_control-main\Project3DCmotorspeedcontrol.uvprojx
-Project File Date:  12/02/2025
+C:\Users\ccortez\Downloads\dc_motor_speed_control_revisited\dc-motor_speed_control-017d6a45ed9352b189c97fdb440ac3084856de41\Project3DCmotorspeedcontrol.uvprojx
+Project File Date:  12/04/2025
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 4 (build 422)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Rebuild target 'Target 1'
 assembling LCD.s...
 Utilities\LCD.s(285): warning: A1581W: Added 2 bytes of padding at address 0x222
-assembling osasm_V2.s...
 assembling Keypad.s...
+assembling osasm_V2.s...
 assembling ASCII_Conversions.s...
 assembling startup_TM4C123.s...
 RTE\Device\TM4C123GH6PM\startup_TM4C123.s(403): warning: A1274W: '\' at end of comment
 compiling system_TM4C123.c...
-compiling Voltage2RPM.c...
-compiling main.c...
-main.c(263): warning:  #1-D: last line of file ends without a newline
-  }
-main.c(81): warning:  #177-D: function "Delay100us"  was declared but never referenced
-  static inline void Delay100us(void)
-main.c: 2 warnings, 0 errors
-compiling os_v2.c...
 compiling motor.c...
+compiling Voltage2RPM.c...
 compiling ADC.c...
+compiling main.c...
+main.c(144): warning:  #111-D: statement is unreachable
+  		OS_Sleep(50);
+main.c(305): warning:  #1-D: last line of file ends without a newline
+  }
+main.c(79): warning:  #177-D: function "Delay100us"  was declared but never referenced
+  static inline void Delay100us(void)
+main.c: 3 warnings, 0 errors
+compiling os_v2.c...
 linking...
-Program Size: Code=6204 RO-data=652 RW-data=116 ZI-data=2348  
-".\Objects\Project3DCmotorspeedcontrol.axf" - 0 Error(s), 4 Warning(s).
+Program Size: Code=4524 RO-data=652 RW-data=100 ZI-data=2348  
+".\Objects\Project3DCmotorspeedcontrol.axf" - 0 Error(s), 5 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -73,9 +75,9 @@ Package Vendor: Keil
    * Component: ARM::CMSIS:CORE:5.5.0
 
    * Component: Keil::Device:Startup:1.0.1
-      Include file:  Device\Include\TM4C123\TM4C123.h
-      Source file:   Device\Source\ARM\startup_TM4C123.s
       Source file:   Device\Source\system_TM4C123.c
+      Source file:   Device\Source\ARM\startup_TM4C123.s
+      Include file:  Device\Include\TM4C123\TM4C123.h
 Build Time Elapsed:  00:00:01
 </pre>
 </body>
