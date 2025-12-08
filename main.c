@@ -11,15 +11,15 @@
 #include "motor.h"
 
 // System Configuration Constants
-#define TIMESLICE          16000    // RTOS time slice of 2 ms (16 MHz clock)
+#define TIMESLICE          32000    // RTOS time slice of 2 ms (16 MHz clock)
 #define CPU_HZ             16000    // CPU frequency in kHz (16 MHz)
-#define PWM_PERIOD         2500     // PWM period in ticks
+#define PWM_PERIOD         4000     // PWM period in ticks
 #define PWM_DUTY_CYCLE     1000     // Initial PWM duty cycle
 #define DEFAULT_MOTOR_SPEED 0       // Default motor speed for testing
 
 // PID Controller Gains (tuning parameters)
-float kP = 0.5;
-float kI = 0.02;
+float kP = 1.0;
+float kI = 0.0;
 
 // Thread Function Declarations
 void retrieveInput(void);             // Handles keypad input
@@ -41,9 +41,7 @@ uint8_t Key_ASCII;                    // Last pressed key in ASCII format
 int32_t Keypress_Buffer;              // Buffer for numeric keypad input
 
 // PID Controller Variables
-int32_t avgRPM, error;     						// Speed tracking and error
-int32_t avgVoltage;										// Average voltage sum
-int32_t targetRPM = 400;							// Initial target RPM 
+int32_t estRPM, targetRPM, error;     // Speed tracking and error
 int32_t P, I, D;                      // PID components
 int32_t actuatorRPM;                  // Calculated motor speed adjustment
 int32_t sum;                          // ADC sample accumulator
@@ -66,11 +64,14 @@ extern int32_t Current_speed(int32_t Avg_volt); // Convert voltage to RPM
 
 // Timer and Initialization Functions
 void TIMER0A_Handler(void);           // Timer interrupt handler for PID
-void TIMER1A_Handler(void);           // Timer interrupt handler for PID
 void PI_Timer_Init(void);             // Timer initialization
+
+// ADC Data
+int32_t sampledADC_value = 0;        // Latest sampled ADC value
 
 // Keypad Buffer Management
 int32_t Keypress_Buffer = -1;         // -1 indicates empty buffer
+int keypadIndex = 0;                  // Buffer index
 
 /**
  * @brief  Creates a precise 100µs delay using the CPU cycle counter
@@ -126,13 +127,10 @@ void retrieveInput(void)
         }
         else if (k == '#') // Confirm entry
         {
-            if (Keypress_Buffer < 400)
+            if (Keypress_Buffer == -1)
             {
                 targetRPM = 0; // Default to 0 if buffer empty
             }
-						else if(Keypress_Buffer > 2400){
-								targetRPM = 2400;
-						}
             targetRPM = Keypress_Buffer;
             Keypress_Buffer = -1; // Clear buffer after confirmation
         }
@@ -140,8 +138,9 @@ void retrieveInput(void)
         {
             Keypress_Buffer = -1; // Reset buffer
         }
+        
+        OS_Sleep(50); // Debounce delay and yield to scheduler
     }
-		OS_Sleep(50);
 }
 
 /**
@@ -177,7 +176,7 @@ void updateLCD(void)
         Display_Msg(tbuf);
         
         Display_Msg(" C: ");
-        Hex2ASCII(cbuf, avgRPM);
+        Hex2ASCII(cbuf, actuatorRPM);
         Display_Msg(cbuf);
 				for(int i = 0; i < 4; i++){
 					if (cbuf[i] >= '0' && cbuf[i]  <= '9')
@@ -199,58 +198,19 @@ void updateLCD(void)
  */
 void TIMER0A_Handler(void)
 {
-		/*
-    // Array implementation:
-		time++;
-    count++;
-    reading_samples[count] = ADC_Read();
-
-    if (count == 100)
-    {
-        count = 0;
-        sum = 0;
-        for(int i = 0; i < 100; i++){
-            sum += reading_samples[i]
-        }
-        // Average voltage to RPM conversion
-        avgVoltage = sum / 100;
-        avgRPM = Current_speed(avgVoltage);
-
-        error = targetRPM - avgRPM;
-
-        // Integrator anti-windup limits
-        P = kP * error;
-        I = I + (kI * error);
-        if(I < -500) I = -500;
-        if(I > 4000) I = 4000;
-        
-        actuatorRPM = P + I;
-
-        // Output saturation limits
-        if (actuatorRPM < 100) actuatorRPM = 0;
-        if ((actuatorRPM < 400) && (actuatorRPM >= 100)) actuatorRPM = 400;
-        if (actuatorRPM > 2400) actuatorRPM = 2400;
-
-        setMotorSpeed(actuatorRPM); // Set motor speed to adjuster PI controller value
-    }
-    
-    TIMER0->ICR = 0x01; // Clear timer 0 interrupt flag
-    // TIMER1 ->ICR = 0x01; // Clear timer 1 interrupt flag
-    */
-		
     time++;
     
     // Accumulate ADC samples for averaging
+    sum += ADC_Read();
     count++;
-		sum += ADC_Read();
     
-    if (count == 99) // Every 10ms (100 samples at 100µs intervals)
+    if (count == 100) // Every 10ms (100 samples at 100µs intervals)
     {
-        avgVoltage = sum *1000;			        // Convert to mV and compute average
-			  avgVoltage = avgVoltage / 100;
-				avgRPM = Current_speed(avgVoltage); // Convert voltage to RPM
+				count = 0;
+        sampledADC_value = sum /100;			        // Convert to mV and compute average
+			  estRPM = Current_speed(sampledADC_value); // Convert voltage to RPM
         
-        error = targetRPM - avgRPM; // Calculate speed error
+        error = targetRPM - estRPM; // Calculate speed error
         
 				P = kP * error;
 				I = I + (kI * error);
@@ -258,19 +218,16 @@ void TIMER0A_Handler(void)
 				// Actuator RPM calculation
 				actuatorRPM = P + I;
 				
-				/*
         // Integrator anti-windup limits
 				if (I > 200) I = 200;
         if (I < -200) I = -200;
-				*/
-			
+				
         // Output saturation limits
         if (actuatorRPM < 400) actuatorRPM = 400;
         if (actuatorRPM > 2400) actuatorRPM = 2400;
         
         setMotorSpeed(actuatorRPM); // Apply control output
         sum = 0; // Reset accumulator for next averaging period
-				count = 0;
     }
     
     TIMER0->ICR = 0x01; // Clear timer interrupt flag
